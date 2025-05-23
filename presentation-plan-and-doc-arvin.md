@@ -77,18 +77,6 @@ Il est composé de trois principaux éléments:
 - **NodeManager**: les esclaves qui gèrent les ressources sur chaque datanode et exécutent les tâches.
 - **ApplicationMaster**: une instance par application qui gère l'exécution de l'application sur le cluster.
 
-### MapReduce
-
-### Hadoop Common
-
-Schéma d’ensemble :
-
-Les clients interagissent avec HDFS pour lire/écrire les données.
-
-Ils soumettent leurs jobs MapReduce à YARN, qui coordonne l’exécution sur le cluster.
-
-HDFS stocke les résultats finaux et intermédiaires, tandis que YARN veille à l’allocation efficace des ressources.
-
 ## Exécution de Hadoop
 Hadoop offre 2 modes d'execution principaux:
 - **Mode Local**: Hadoop s'exécute sur une seule machine, sans HDFS. Il est principalement utilisé pour le développement et les tests.
@@ -98,8 +86,62 @@ Hadoop offre 2 modes d'execution principaux:
 
 ## Flux d'un traitement (job) MapReduce
 
+Objectif : Montrer comment Hadoop traite un job de type MapReduce.
+
+Étapes du traitement MapReduce :
+
+-**Input Splits** : Le fichier d'entrée est découpé en blocs (splits).
+
+-**Map Phase** : Chaque split est traité en parallèle pour générer des paires clé/valeur intermédiaires.
+
+-**Shuffle & Sort**: Les sorties intermédiaires sont redistribuées et triées par clé.
+
+-**Reduce Phase** : Agrégation des résultats par clé.
+
+-**Output** : Résultat final écrit dans HDFS.
+
 ## Cas d'utilisation
+
+Objectif : Montrer que Hadoop est utilisé dans de nombreux secteurs.
+
+
+-**Web Analytics** : traitement des logs de millions de visites web.
+
+-**Finance** : détection de fraudes sur de gros volumes de transactions.
+
+-**Santé** : traitement d’images médicales et séquençage ADN.
+
+-**Télécom** : gestion de données issues des capteurs et des appels.
+
+-**Industrie** : maintenance prédictive à partir de données IoT.
+
 
 ## Démonstration: WordCount
 
+
+
 ## Bénefices et limites
+
+# Bénéfices :
+
+-Haute scalabilité horizontale
+
+-Tolérance aux pannes
+
+-Open source et large écosystème (Hive, Pig, Spark…)
+
+-Adapté aux données massives et variées
+
+# Limites :
+
+-Latence élevée → pas idéal pour le temps réel
+
+-Courbe d’apprentissage
+
+-MapReduce moins performant que Spark pour certains cas
+
+-Infrastructure lourde à maintenir
+
+
+## Conclusion
+Hadoop a révolutionné la gestion et le traitement des Big Data.Bien qu'il soit parfois remplacé par Spark, il reste fondamental.Hadoop est surtout une architecture et un écosystème.

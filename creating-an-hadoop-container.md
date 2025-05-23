@@ -49,3 +49,13 @@
     docker start hadoop-debug
     docker exec -it hadoop-debug bash 
     ```
+
+Pour creer un conteneur Hadoop avec un volume monté, vous pouvez utiliser la commande suivante :
+
+```bash
+docker run --name hadoop -v "D:\python\bigdata\hadoop\hadoop-demo\ml-100k\ml-100k:/data/ml-100k" -it -p 9870:9870 -p 8088:8088 silicoflare/hadoop:amd bash
+```
+
+hdfs dfs -mkdir -p /user/demo/input
+hdfs dfs -put -f /data/ml-100k/u.data /user/demo/input
+```
