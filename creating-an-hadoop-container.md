@@ -84,6 +84,38 @@
    ```
    Cette commande permet de vérifier l'intégrité du fichier dans HDFS, en affichant les informations sur les fichiers, les blocs et les racks. Elle est utile pour s'assurer que le fichier a été correctement chargé dans HDFS et qu'il n'y a pas de problèmes d'intégrité.
 
+
+### Job MapReduce
+#### But: montrer le traitement distribué de Hadoop en action
+1. Preparons nos scripts dans le répertoire `/data/data` monté dans le conteneur.
+   ```bash
+   cd /data/data
+   ```
+   Créons  le fichier `mapper.py` et `reducer.py`
+   (Les scripts de créations sont dans le fichier `scripts.txt` dans le projet)
+   Rendons les scripts exécutables:
+   ```bash
+   chmod +x /data/mapper.py /data/reducer.py
+   ```
+
+2. Exécuter le job MapReduce
+   ```bash
+   hadoop jar $HADOOP_HOME/share/hadoop/tools/lib/hadoop-streaming-3.3.6.jar -input /user/demo/input/addiction.csv -output /user/demo/output -mapper /data/mapper.py -reducer /data/reducer.py -file /data/mapper.py -file /data/reducer.py
+   ```
+3. Lister les fichiers de sortie:
+   ```bash
+   hdfs dfs -ls /user/demo/output
+   ```
+4. Afficher le contenu du fichier de sortie:
+   ```bash
+    hdfs dfs -cat /user/demo/output/part-00000
+    ```
+5. Afficher les 10 premiers mots triés par ordre décroissant sur la deuxieme colonne:
+   ```bash
+   hdfs dfs -cat /user/demo/output/part-00000 | sort -k2,2nr | head -n 10
+   ```
+   
+
 ### Acceder a l'interface web de Hadoop
 - HDFS : http://localhost:9870
 - YARN : http://localhost:8088

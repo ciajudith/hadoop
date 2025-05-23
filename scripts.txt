@@ -1,0 +1,41 @@
+The mapper and reducer scripts for the MapReduce job
+
+#The mapper.
+
+cat > /data/mapper.py << 'EOF'
+#!/usr/bin/env python3
+import sys
+
+# Skip the CSV header
+for line in sys.stdin:
+    line = line.strip()
+    if not line or line.startswith("Student_ID,"):
+        continue
+    parts = line.split(",")
+    # Make sure we have enough columns
+    if len(parts) < 6:
+        continue
+    country = parts[4]
+    try:
+        hours = float(parts[5])
+        print(f"{country}\t{hours}\t1")
+    except ValueError:
+        continue
+EOF
+
+# The reducer.
+
+cat > /data/reducer.py << 'EOF'
+#!/usr/bin/env python3
+import sys
+from collections import defaultdict
+
+sums, counts = defaultdict(float), defaultdict(int)
+for line in sys.stdin:
+    country, hours, cnt = line.strip().split('\t')
+    sums[country] += float(hours)
+    counts[country] += int(cnt)
+for country in sums:
+    avg = sums[country] / counts[country]
+    print(f"{country}\t{avg:.2f}")
+EOF
