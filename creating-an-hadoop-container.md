@@ -1,6 +1,10 @@
+# Pour commencer
+
 ## Creation d'un container hadoop
+
 ### Prerequis
 - [Docker](https://docs.docker.com/get-docker/)
+
 ### Installation
 1. Recuperer l'image Docker d'apache hadoop
 
@@ -49,13 +53,21 @@
     docker start hadoop-debug
     docker exec -it hadoop-debug bash 
     ```
-
-Pour creer un conteneur Hadoop avec un volume monté, vous pouvez utiliser la commande suivante :
+4. Creer un conteneur Hadoop avec un volume mont
+Pour créer un conteneur Hadoop avec un volume monté, vous pouvez utiliser la commande suivante :
 
 ```bash
 docker run --name hadoop -v "D:\python\bigdata\hadoop\hadoop-demo\ml-100k\ml-100k:/data/ml-100k" -it -p 9870:9870 -p 8088:8088 silicoflare/hadoop:amd bash
 ```
+Cela montera le répertoire `ml-100k` de votre machine hôte dans le conteneur Hadoop à l'emplacement `/data/ml-100k`.
+
+Les configurations du  numero 3 s'appliquent aussi ici.
+
 
 hdfs dfs -mkdir -p /user/demo/input
 hdfs dfs -put -f /data/ml-100k/u.data /user/demo/input
 ```
+
+### Acceder a l'interface web de Hadoop
+- HDFS : http://localhost:9870
+- YARN : http://localhost:8088
