@@ -57,16 +57,32 @@
 
    Pour créer un conteneur Hadoop avec un volume monté, vous pouvez utiliser la commande suivante :
    ```bash
-   docker run --name hadoop -v "D:\python\bigdata\hadoop\hadoop-demo\ml-100k\ml-100k:/data/ml-100k" -it -p 9870:9870 -p 8088:8088 silicoflare/hadoop:amd bash
-   ```
-   Cela montera le répertoire `ml-100k` de votre machine hôte dans le conteneur Hadoop à l'emplacement `/data/ml-100k`. Ainsi, vous pourrez accéder aux fichiers de ce répertoire depuis le conteneur.
+   docker run --name hadoop -v "D:\python\bigdata\hadoop\hadoop-demo\data:/data/data" -it -p 9870:9870 -p 8088:8088 silicoflare/hadoop:amd bash
+    ```
+   Dans cette commande, le répertoire `D:\python\bigdata\hadoop\hadoop-demo\data` de votre machine hôte est monté dans le conteneur Hadoop à l'emplacement `/data/data`. 
+   Vous pouvez remplacer ce chemin par le chemin de votre choix sur votre machine hôte.
+   Ainsi, vous pourrez accéder aux fichiers de ce répertoire depuis le conteneur. 
    Les configurations du numero 3 s'appliquent aussi ici.
 
 5. Création et déplacement d'un élément dans HDFS
    ```
    hdfs dfs -mkdir -p /user/demo/input
-   hdfs dfs -put -f /data/ml-100k/u.data /user/demo/input
+   hdfs dfs -put -f /data/data/addiction/addiction.csv /user/demo/input
    ```
+    Cette commande crée un répertoire `/user/demo/input` dans HDFS et y déplace le fichier `addiction.csv` depuis le répertoire monté `/data/data` du conteneur.
+   
+   ```
+   hdfs dfs -mkdir -p /user/demo/testinput
+   hdfs dfs -D dfs.blocksize=1048576 -put -f /data/data/addiction/addiction.csv /user/demo/testinput
+   ```
+   Ici, nous avons spécifié la taille du bloc à 1 Mo (1048576 octets) lors du déplacement du fichier. Cela peut être utile pour optimiser le stockage et le traitement des données dans HDFS.
+6. Verifier l'intégrité du fichier dans HDFS
+   ```
+   hdfs fsck /user/demo/input/addiction.csv -files -blocks -locations -racks
+   hdfs fsck /user/demo/testinput/addiction.csv -files -blocks -locations -racks
+
+   ```
+   Cette commande permet de vérifier l'intégrité du fichier dans HDFS, en affichant les informations sur les fichiers, les blocs et les racks. Elle est utile pour s'assurer que le fichier a été correctement chargé dans HDFS et qu'il n'y a pas de problèmes d'intégrité.
 
 ### Acceder a l'interface web de Hadoop
 - HDFS : http://localhost:9870
