@@ -53,20 +53,20 @@
     docker start hadoop-debug
     docker exec -it hadoop-debug bash 
     ```
-4. Creer un conteneur Hadoop avec un volume mont
-Pour créer un conteneur Hadoop avec un volume monté, vous pouvez utiliser la commande suivante :
+4. Créer un conteneur Hadoop avec un volume monté
 
-```bash
-docker run --name hadoop -v "D:\python\bigdata\hadoop\hadoop-demo\ml-100k\ml-100k:/data/ml-100k" -it -p 9870:9870 -p 8088:8088 silicoflare/hadoop:amd bash
-```
-Cela montera le répertoire `ml-100k` de votre machine hôte dans le conteneur Hadoop à l'emplacement `/data/ml-100k`.
+   Pour créer un conteneur Hadoop avec un volume monté, vous pouvez utiliser la commande suivante :
+   ```bash
+   docker run --name hadoop -v "D:\python\bigdata\hadoop\hadoop-demo\ml-100k\ml-100k:/data/ml-100k" -it -p 9870:9870 -p 8088:8088 silicoflare/hadoop:amd bash
+   ```
+   Cela montera le répertoire `ml-100k` de votre machine hôte dans le conteneur Hadoop à l'emplacement `/data/ml-100k`. Ainsi, vous pourrez accéder aux fichiers de ce répertoire depuis le conteneur.
+   Les configurations du numero 3 s'appliquent aussi ici.
 
-Les configurations du  numero 3 s'appliquent aussi ici.
-
-
-hdfs dfs -mkdir -p /user/demo/input
-hdfs dfs -put -f /data/ml-100k/u.data /user/demo/input
-```
+5. Création et déplacement d'un élément dans HDFS
+   ```
+   hdfs dfs -mkdir -p /user/demo/input
+   hdfs dfs -put -f /data/ml-100k/u.data /user/demo/input
+   ```
 
 ### Acceder a l'interface web de Hadoop
 - HDFS : http://localhost:9870

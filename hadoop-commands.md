@@ -14,27 +14,46 @@ EOF
 
 hdfs dfs -put -f sample.txt /user/root/input
 
-### Lister les fichiers dans HDFS:
-hdfs dfs -ls /user/root/input
-### Exécuter un job MapReduce pour compter les mots:
-hadoop jar $HADOOP_HOME/share/hadoop/mapreduce/hadoop-mapreduce-examples-3.3.6.jar wordcount /user/root/input /user/root/output
-
-### Lister les fichiers de sortie:
-hdfs dfs -ls /user/root/output
-
-### Afficher le contenu du fichier de sortie:
-hdfs dfs -cat /user/$(whoami)/output/part-r-00000
-
-### Afficher les 10 premiers mots triés par ordre décroissant:
-hdfs dfs -cat /user/root/output/part-r-00000 | sort -nr | head -n 10
-### Afficher les 10 premiers mots triés par ordre croissant:
-hdfs dfs -cat /user/root/output/part-r-00000 | sort | head -n 10
-
-
+### Vérifier l'intégrité du fichier dans HDFS:
 ```
 hdfs fsck /user/root/input/sample.txt -files -blocks -racks
+``` 
+Cette commande permet de vérifier l'intégrité du fichier dans HDFS, en affichant les informations sur les fichiers, les blocs et les racks. Elle est utile pour s'assurer que le fichier a été correctement chargé dans HDFS et qu'il n'y a pas de problèmes d'intégrité.
+
+
+### Lister les fichiers dans HDFS:
 ```
-Cette commande permet de vérifier l'intégrité du fichier dans HDFS.
+hdfs dfs -ls /user/root/input
+```
+
+### Afficher le contenu du fichier texte:
+```
+hdfs dfs -cat /user/root/input/sample.txt
+```
+
+### Exécuter un job MapReduce pour compter les mots:
+```
+hadoop jar $HADOOP_HOME/share/hadoop/mapreduce/hadoop-mapreduce-examples-3.3.6.jar wordcount /user/root/input /user/root/output
+```
+
+### Lister les fichiers de sortie:
+```
+hdfs dfs -ls /user/root/output
+```
+### Afficher le contenu du fichier de sortie:
+```
+hdfs dfs -cat /user/$(whoami)/output/part-r-00000
+```
+
+### Afficher les 10 premiers mots triés par ordre décroissant:
+```
+hdfs dfs -cat /user/root/output/part-r-00000 | sort -nr | head -n 10
+```
+### Afficher les 10 premiers mots triés par ordre croissant:
+```
+hdfs dfs -cat /user/root/output/part-r-00000 | sort | head -n 10
+```
+
 
 ### Supprimer les fichiers de sortie:
 hdfs dfs -rm -r -f /user/$(whoami)/output
