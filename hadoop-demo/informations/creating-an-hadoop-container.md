@@ -114,7 +114,12 @@
    ```bash
    hdfs dfs -cat /user/demo/output/part-00000 | sort -k2,2nr | head -n 10
    ```
-   
+   ```
+   pip install pandas matplotlib
+   hdfs dfs -get /user/demo/output/part-00000 ./part-00000
+   python3 addiction/analysis.py ./part-00000
+   hdfs dfs -put /data/data/addiction_analysis.png /user/demo/input
+   ```
 
 ### Acceder a l'interface web de Hadoop
 - HDFS : http://localhost:9870
