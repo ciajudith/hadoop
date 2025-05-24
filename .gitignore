@@ -1,3 +1,6 @@
-./hadoop-demo/ml-32m
-./hadoop-demo/ml-100k
-/hadoop-demo/
+# Hadoop Demo Project
+hadoop-demo/informations/
+hadoop-demo/data/ml-100k/
+hadoop-demo/data/ml-32m/
+hadoop-demo/data/output/
+.gitignore
