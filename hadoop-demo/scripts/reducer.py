@@ -1,12 +1,30 @@
 #!/usr/bin/env python3
 import sys
-from collections import defaultdict
 
-sums, counts = defaultdict(float), defaultdict(int)
+current_country = None
+total_hours     = 0.0
+total_count     = 0
+
+def flush():
+    if current_country is not None and total_count > 0:
+        avg = total_hours / total_count
+        print(f"{current_country}\t{avg:.2f}")
+
 for line in sys.stdin:
-    country, hours, cnt = line.strip().split('\t')
-    sums[country] += float(hours)
-    counts[country] += int(cnt)
-for country in sums:
-    avg = sums[country] / counts[country]
-    print(f"{country}\t{avg:.2f}")
+    line = line.strip()
+    if not line:
+        continue
+    country, hours, cnt = line.split("\t")
+    hours = float(hours)
+    cnt   = int(cnt)
+
+    if country == current_country:
+        total_hours += hours
+        total_count += cnt
+    else:
+        flush()
+        current_country = country
+        total_hours     = hours
+        total_count     = cnt
+
+flush()

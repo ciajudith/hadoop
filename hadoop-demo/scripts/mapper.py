@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+import sys
 
 for line in sys.stdin:
     line = line.strip()
@@ -14,3 +15,5 @@ for line in sys.stdin:
         print(f"{country}\t{hours}\t1")
     except ValueError:
         continue
+    # Output format: country \t hours \t 1
+    print(f"{country}\t{hours}\t1")

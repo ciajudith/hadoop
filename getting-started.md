@@ -75,9 +75,7 @@ docker run --name hadoop-debug   -it -p 9870:9870 -p 8088:8088   silicoflare/had
 2. Formater le NameNode et démarrer HDFS :
 
    ```bash
-   hdfs namenode -format
-   hdfs --daemon start namenode
-   hdfs --daemon start datanode
+/
    ```
 
 3. Démarrer YARN :
@@ -112,7 +110,7 @@ docker run --name hadoop -v "/chemin/local/data:/data/data" -it -p 9870:9870 -p 
 Chez moi, cela donne :
 
 ```bash
-docker run --name hadoop -v "D:\python\bigdata\hadoop\hadoop-demo\data:/data/data" -it -p 9870:9870 -p 8088:8088 silicoflare/hadoop:amd bash
+docker run --name hadoop -v "D:\python\bigdata\hadoop\hadoop-demo\data:/data/data" -v "D:\python\bigdata\hadoop\hadoop-demo\scripts:/data/scripts" -it -p 9870:9870 -p 8088:8088 silicoflare/hadoop:amd bash
 ```
 
 - **`/chemin/local/data`** : dossier source sur la machine hôte
@@ -222,15 +220,24 @@ Cette commande permet de vérifier l'intégrité du fichier dans HDFS, en affich
 
     ```bash
     cd /data/data
-    # mapper.py et reducer.py fournis dans scripts.txt
+    ```
+    Les commandes cat de création des fichiers mapper.py et reducer.py sont dans le fichier `scripts.txt`.
+
+    ```bash
     chmod +x mapper.py reducer.py
     ```
+   Ces 2 précédentes commandes ne sont importantes que si vous n'avez pas monté le volume depuis l’hôte.
 
 2. **Exécution** :
-
+    
     ```bash
     hadoop jar $HADOOP_HOME/share/hadoop/tools/lib/hadoop-streaming-3.3.6.jar -input  /user/demo/input/addiction.csv       -output /user/demo/output       -mapper /data/data/mapper.py       -reducer /data/data/reducer.py       -file   /data/data/mapper.py       -file   /data/data/reducer.py
     ```
+   Dans le cas où  vous avez monté le volume depuis l’hôte, et utilisé ces scripts .py au lieu de les créer directement dans le container, utilisez cette commande:
+    ```bash
+    hadoop jar $HADOOP_HOME/share/hadoop/tools/lib/hadoop-streaming-3.3.6.jar -input /user/demo/input/addiction.csv -output /user/demo/output -mapper "python3 mapper.py" -reducer "python3 reducer.py" -file /data/scripts/mapper.py -file /data/scripts/reducer.py
+    ```
+   Elle permet d'exécuter les scripts Python directement dans le conteneur, en utilisant `python3` pour le mapper et le reducer.
 
 3. **Résultats** :
 
@@ -245,15 +252,35 @@ Cette commande permet de vérifier l'intégrité du fichier dans HDFS, en affich
 
 Pour traiter et visualiser les résultats hors de Hadoop :
 
-```bash
-pip install pandas matplotlib
-hdfs dfs -get /user/demo/output/part-00000 ./part-00000
-python3 addiction/analysis.py ./part-00000
-hdfs dfs -put /data/data/addiction_analysis.png /user/demo/input
-```
+1. **Installer les dépendances** :
 
-> Le script `analysis.py` doit lire le fichier `part-00000`, générer un graphique et l’enregistrer sous `addiction_analysis.png`.
+   Dans le conteneur, installez les bibliothèques nécessaires :
+    ```bash
+    pip install pandas matplotlib
+    ```
+   Les commandes 2 et 3 seront exécutés dans le repertoire `/data/data/addiction/`.
+   ```bash
+    cd /data/data/addiction/
+   ```
 
+2. **Télécharger les résultats** :
+
+   Récupérer le fichier de sortie du job MapReduce :
+
+   ```bash
+   hdfs dfs -get /user/demo/output/part-00000 ./part-00000
+   ```
+3. **Exécuter le script d’analyse** :
+    ```bash
+    python3 /data/scripts/analysis.py part-00000
+    ```
+
+> Le script `analysis.py` doit lire le fichier `part-00000`, générer un graphique et l’enregistrer sous `addiction_top20.png.png`.
+Vous pouvez adapter le script pour vos propres besoins d'analyse.
+
+4. **Visualiser les résultats** :
+
+   Ouvrir le fichier `addiction_top20.png` pour voir les résultats de l'analyse.
 ---
 
 ## 7. Accès aux interfaces web Hadoop

@@ -2,11 +2,11 @@
 import pandas as pd
 import matplotlib.pyplot as plt
 import argparse
+import os
 
 def main():
-    # 1) Analyse des arguments
     parser = argparse.ArgumentParser(
-        description="Visualiser la moyenne d'heures d'addiction par étudiant et par pays"
+        description="Visualiser la moyenne d'heures d'addiction par pays (top 20)"
     )
     parser.add_argument(
         "input_file",
@@ -14,7 +14,7 @@ def main():
     )
     args = parser.parse_args()
 
-    # 2) Lecture des données
+    # Lecture des données
     df = pd.read_csv(
         args.input_file,
         sep='\t',
@@ -22,22 +22,26 @@ def main():
         names=['country', 'avg_hours']
     )
 
-    # 3) Tri décroissant des moyennes
-    df_sorted = df.sort_values(by='avg_hours', ascending=False)
+    # Tri décroissant et sélection des 20 premiers
+    df_top20 = df.sort_values(by='avg_hours', ascending=False).head(20)
 
-    # 4) Création du graphique
+    # Création du graphique
     plt.figure(figsize=(12, 6))
-    plt.bar(df_sorted['country'], df_sorted['avg_hours'])
-    plt.xticks(rotation=90)
+    plt.bar(df_top20['country'], df_top20['avg_hours'])
+    plt.xticks(rotation=45, ha='right')
     plt.xlabel('Pays')
     plt.ylabel("Moyenne d'heures d'addiction")
-    plt.title("Moyenne d'heures par étudiant et par pays")
+    plt.title("Top 20 des pays par moyenne d'heures d'utilisation")
     plt.tight_layout()
 
-    # 5) Affichage
-    plt.savefig('addiction_analysis.png')
+    # Définition du nom de fichier de sortie et son chemin absolu
+    output_filename = 'addiction_top20.png'
+    output_path = os.path.abspath(output_filename)
+
+    # Sauvegarde et affichage
+    plt.savefig(output_path)
     plt.show()
-    print("Image successfully created")
+    print(f"Graphique enregistré sous : {output_path}")
 
 if __name__ == "__main__":
     main()
