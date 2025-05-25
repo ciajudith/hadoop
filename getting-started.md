@@ -75,7 +75,9 @@ docker run --name hadoop-debug   -it -p 9870:9870 -p 8088:8088   silicoflare/had
 2. Formater le NameNode et démarrer HDFS :
 
    ```bash
-/
+   hdfs namenode -format
+   hdfs --daemon start namenode
+   hdfs --daemon start datanode
    ```
 
 3. Démarrer YARN :
