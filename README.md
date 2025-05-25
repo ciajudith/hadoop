@@ -25,7 +25,8 @@ Ce dépôt propose une démonstration simple et pédagogique de l’utilisation 
 hadoop/
 ├─ hadoop-demo/
 │  ├─ data/            # Dataset CSV (`addiction.csv`)
-      └─ addiction.csv
+   │  └─ addiction/
+   │     └─ addiction.csv
 │  └─ scripts/         # Scripts Hadoop Streaming et analyse
 │     ├─ mapper.py     # Mapper pour streaming
 │     ├─ reducer.py    # Reducer pour streaming
